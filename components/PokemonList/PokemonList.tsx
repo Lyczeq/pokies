@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 export const PokemonList = function () {
-  const { pokemons, isLoading, getPokemons, moreLoading } = useGetPokemons();
+  const { pokemons, isLoading, getPokemons } = useGetPokemons();
 
   return isLoading ? (
     <ActivityIndicator />

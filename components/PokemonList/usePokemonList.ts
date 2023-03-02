@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react';
 export const useGetPokemons = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [moreLoading, setIsMoreLoading] = useState(true);
 
   const getPokemons = async () => {
-    setIsMoreLoading(true);
     try {
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon/?limit=${pokemons.length + 10}`
@@ -18,7 +16,6 @@ export const useGetPokemons = () => {
       console.error(error);
     } finally {
       setIsLoading(false);
-      setIsMoreLoading(false);
     }
   };
 
@@ -27,7 +24,6 @@ export const useGetPokemons = () => {
   }, []);
 
   return {
-    moreLoading,
     pokemons,
     isLoading,
     getPokemons,
