@@ -30,7 +30,7 @@ export function PokemonDetails({ navigation, route }) {
     name: p.stat.name,
     number: p['base_stat'],
   }));
-  console.log({ stats });
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -44,7 +44,7 @@ export function PokemonDetails({ navigation, route }) {
           />
           <View style={styles.stats}>
             {stats.map(s => (
-              <View style={styles.statsChild}>
+              <View style={styles.statsChild} key={s.name}>
                 <Text>{s.name}</Text>
                 <Text>{s.number}</Text>
               </View>
@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   statsChild: {
+    borderColor: '#888',
+    borderWidth: 1,
     padding: 5,
     flexGrow: 1,
     flexBasis: '33%',

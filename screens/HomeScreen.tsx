@@ -1,10 +1,18 @@
 import { StyleSheet, View } from 'react-native';
 import { PokemonList } from '../components/PokemonList/PokemonList';
+import { useGetPokemons } from '../hooks/usePokemonList';
 
 export function HomeScreen({ navigation }) {
+  const { pokemons, isLoading, getPokemons } = useGetPokemons();
+
   return (
     <View style={styles.container}>
-      <PokemonList navigation={navigation} />
+      <PokemonList
+        navigation={navigation}
+        pokemons={pokemons}
+        isLoading={isLoading}
+        getPokemons={getPokemons}
+      />
     </View>
   );
 }

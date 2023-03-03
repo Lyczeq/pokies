@@ -1,15 +1,22 @@
-import { useGetPokemons } from './usePokemonList';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  View,
-  Button,
-} from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { Pokemon } from '../../types/Pokemon';
+import { PokemonListElement } from '../PokemonListElement/PokemonListElement';
 
-export const PokemonList = function ({ navigation }) {
-  const { pokemons, isLoading, getPokemons } = useGetPokemons();
+type PokemonListProps = {
+  pokemons: Pokemon[];
+  isLoading?: boolean;
+  getPokemons?: VoidFunction;
+  navigation: any;
+};
 
+export const PokemonList = function ({
+  navigation,
+  pokemons,
+  isLoading,
+  getPokemons,
+}: PokemonListProps) {
+  console.log(isLoading);
+  console.log({pokemons});
   return isLoading ? (
     <ActivityIndicator />
   ) : (
@@ -18,23 +25,15 @@ export const PokemonList = function ({ navigation }) {
       data={pokemons}
       keyExtractor={({ name }) => name}
       renderItem={({ item }) => (
-        <Button
-          title={item.name}
-          onPress={() => {
-            navigation.push('pokemon-details', {
-              name: item.name,
-              url: item.url,
-            });
-          }}
-        ></Button>
+        <PokemonListElement pokemon={item} navigation={navigation} />
       )}
       onEndReachedThreshold={0.1}
       onEndReached={getPokemons}
-      ListFooterComponent={
-        <View>
-          <ActivityIndicator />
-        </View>
-      }
+      // ListFooterComponent={
+      //   <View style={{ margin: 80 }}>
+      //     <ActivityIndicator />
+      //   </View>
+      // }
     />
   );
 };
@@ -42,11 +41,8 @@ export const PokemonList = function ({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
     paddingVertical: 30,
     marginBottom: 10,
-  },
-  pokemon: {
-
   },
 });

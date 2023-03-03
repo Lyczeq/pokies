@@ -1,5 +1,5 @@
-import { Pokemon } from './../../types/Pokemon';
 import { useEffect, useState } from 'react';
+import { Pokemon } from '../types/Pokemon';
 
 export const useGetPokemons = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
