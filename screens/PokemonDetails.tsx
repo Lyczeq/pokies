@@ -24,7 +24,7 @@ const useGetSinglePokemon = (url: string) => {
   return { pokemon, isLoading };
 };
 
-export function PokemonDetails({ navigation, route }) {
+export function PokemonDetails({ route }) {
   const { pokemon, isLoading } = useGetSinglePokemon(route.params.url);
   const stats = (pokemon?.stats ?? []).map(p => ({
     name: p.stat.name,

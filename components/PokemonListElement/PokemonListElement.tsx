@@ -3,14 +3,17 @@ import { Button, View, StyleSheet } from 'react-native';
 import { useFavoritePokemons } from '../../hooks/useFavoritePokemons';
 import { Pokemon } from '../../types/Pokemon';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export const PokemonListElement = memo(
   ({ pokemon, navigation }: { pokemon: Pokemon; navigation: any }) => {
+    const { navigate } = useNavigation();
     const { togglePokemonFromFavorites, isPokemonFavorite } =
       useFavoritePokemons();
 
     const navigateToPokemonDetails = (item: Pokemon) => {
-      navigation.push('pokemon-details', {
+      console.log(item);
+      navigate('pokemon-details', {
         name: item.name,
         url: item.url,
       });

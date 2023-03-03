@@ -15,8 +15,6 @@ export const PokemonList = function ({
   isLoading,
   getPokemons,
 }: PokemonListProps) {
-  console.log(isLoading);
-  console.log({pokemons});
   return isLoading ? (
     <ActivityIndicator />
   ) : (
