@@ -1,13 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import { PokemonList } from '../components/PokemonList/PokemonList';
 
-export function HomeScreen() {
+export function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <PokemonList />
+      <PokemonList navigation={navigation} />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

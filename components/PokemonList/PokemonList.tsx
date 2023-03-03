@@ -2,12 +2,12 @@ import { useGetPokemons } from './usePokemonList';
 import {
   ActivityIndicator,
   FlatList,
-  Text,
   StyleSheet,
   View,
+  Button,
 } from 'react-native';
 
-export const PokemonList = function () {
+export const PokemonList = function ({ navigation }) {
   const { pokemons, isLoading, getPokemons } = useGetPokemons();
 
   return isLoading ? (
@@ -17,7 +17,17 @@ export const PokemonList = function () {
       style={styles.container}
       data={pokemons}
       keyExtractor={({ name }) => name}
-      renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+      renderItem={({ item }) => (
+        <Button
+          title={item.name}
+          onPress={() => {
+            navigation.push('pokemon-details', {
+              name: item.name,
+              url: item.url,
+            });
+          }}
+        ></Button>
+      )}
       onEndReachedThreshold={0.1}
       onEndReached={getPokemons}
       ListFooterComponent={
@@ -36,9 +46,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     marginBottom: 10,
   },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+  pokemon: {
+
   },
 });
