@@ -6,11 +6,9 @@ type PokemonListProps = {
   pokemons: Pokemon[];
   isLoading?: boolean;
   getPokemons?: VoidFunction;
-  navigation: any;
 };
 
 export const PokemonList = function ({
-  navigation,
   pokemons,
   isLoading,
   getPokemons,
@@ -22,16 +20,16 @@ export const PokemonList = function ({
       style={styles.container}
       data={pokemons}
       keyExtractor={({ name }) => name}
-      renderItem={({ item }) => (
-        <PokemonListElement pokemon={item} navigation={navigation} />
-      )}
+      renderItem={({ item }) => <PokemonListElement pokemon={item} />}
       onEndReachedThreshold={0.1}
       onEndReached={getPokemons}
-      // ListFooterComponent={
-      //   <View style={{ margin: 80 }}>
-      //     <ActivityIndicator />
-      //   </View>
-      // }
+      ListFooterComponent={
+        getPokemons && (
+          <View style={{ margin: 80 }}>
+            <ActivityIndicator />
+          </View>
+        )
+      }
     />
   );
 };

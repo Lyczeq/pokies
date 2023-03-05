@@ -1,4 +1,4 @@
-import { createMachine, assign } from 'xstate';
+import { assign, createMachine } from 'xstate';
 import { Pokemon } from '../types/Pokemon';
 
 type EventToggleFavorite = {
@@ -19,10 +19,10 @@ export const favoritePokemonsMachine = createMachine({
         assign({
           favorites: (context, event) => {
             const isPokemonFavorite = context.favorites.find(
-              f => f.name === event.newFavorite.name
+              (f) => f.name === event.newFavorite.name,
             );
             return isPokemonFavorite
-              ? context.favorites.filter(f => f.name !== event.newFavorite.name)
+              ? context.favorites.filter((f) => f.name !== event.newFavorite.name)
               : [...context.favorites, event.newFavorite];
           },
         }),

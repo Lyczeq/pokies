@@ -1,37 +1,15 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { FavoritePokemonsContextProvider } from './contexts/FavoritePokemonsContext';
+import { FavoritePokemons } from './screens/FavoritePokemons';
 import { HomeScreen } from './screens/HomeScreen';
 import { PokemonDetails } from './screens/PokemonDetails';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { FavoritePokemons } from './screens/FavoritePokemons';
-import { createContext } from 'react';
-import { favoritePokemonsMachine } from './state/favoritePokemonsMachine';
-import { useInterpret } from '@xstate/react';
 
 const Stack = createNativeStackNavigator();
+
 const Tab = createBottomTabNavigator();
-
-type FavoritePokemonsContextProvider = {
-  favoritePokemonsService: {
-    id: string;
-  };
-};
-export const FavoritePokemonsContext =
-  createContext<FavoritePokemonsContextProvider>({
-    favoritePokemonsService: {
-      id: '',
-    },
-  });
-
-const FavoritePokemonsContextProvider = ({ children }) => {
-  const favoritePokemonsService = useInterpret(favoritePokemonsMachine);
-  return (
-    <FavoritePokemonsContext.Provider value={{ favoritePokemonsService }}>
-      {children}
-    </FavoritePokemonsContext.Provider>
-  );
-};
 
 const Home = () => {
   return (
@@ -64,21 +42,17 @@ const Home = () => {
 
 export default function App() {
   return (
-    <FavoritePokemonsContextProvider>
-      <NavigationContainer>
+    <NavigationContainer>
+      <FavoritePokemonsContextProvider>
         <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen
             name="pokemon-details"
             component={PokemonDetails}
-            options={({ route }) => ({ title: route.params?.name})}
+            options={({ route }) => ({ title: route.params?.name })}
           />
         </Stack.Navigator>
-      </NavigationContainer>
-    </FavoritePokemonsContextProvider>
+      </FavoritePokemonsContextProvider>
+    </NavigationContainer>
   );
 }

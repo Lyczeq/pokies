@@ -26,7 +26,7 @@ const useGetSinglePokemon = (url: string) => {
 
 export function PokemonDetails({ route }) {
   const { pokemon, isLoading } = useGetSinglePokemon(route.params.url);
-  const stats = (pokemon?.stats ?? []).map(p => ({
+  const stats = (pokemon?.stats ?? []).map((p) => ({
     name: p.stat.name,
     number: p['base_stat'],
   }));
@@ -38,12 +38,9 @@ export function PokemonDetails({ route }) {
       ) : (
         <>
           <Text style={styles.name}>{pokemon.name}</Text>
-          <Image
-            style={styles.image}
-            source={{ uri: pokemon.sprites['front_default'] }}
-          />
+          <Image style={styles.image} source={{ uri: pokemon.sprites['front_default'] }} />
           <View style={styles.stats}>
-            {stats.map(s => (
+            {stats.map((s) => (
               <View style={styles.statsChild} key={s.name}>
                 <Text>{s.name}</Text>
                 <Text>{s.number}</Text>

@@ -2,11 +2,11 @@ import { StyleSheet, View } from 'react-native';
 import { PokemonList } from '../components/PokemonList/PokemonList';
 import { useFavoritePokemons } from '../hooks/useFavoritePokemons';
 
-export function FavoritePokemons({ navigation }) {
+export function FavoritePokemons() {
   const { favoritePokemons } = useFavoritePokemons();
   return (
     <View style={styles.container}>
-      <PokemonList navigation={navigation} pokemons={favoritePokemons} />
+      <PokemonList pokemons={favoritePokemons} />
     </View>
   );
 }
