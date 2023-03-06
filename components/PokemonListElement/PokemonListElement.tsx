@@ -1,15 +1,16 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useMachine } from '@xstate/react';
-import React, { memo } from 'react';
+import { useActor } from '@xstate/react';
+import React, { memo, useContext } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import { pokemonMachine } from '../../state/pokemonMachine';
+import { PokemonsContext } from '../../contexts/PokemonsContext';
 import { Pokemon } from '../../types/Pokemon';
 
 export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   const { navigate } = useNavigation();
   // const { togglePokemonFromFavorites, isPokemonFavorite } = useFavoritePokemons();
-  const [state, send] = useMachine(pokemonMachine);
+  const pokemonsService = useContext(PokemonsContext);
+  const [state, send] = useActor(pokemonsService.pokemonService);
 
   const navigateToPokemonDetails = (item: Pokemon) => {
     navigate('pokemon-details', {

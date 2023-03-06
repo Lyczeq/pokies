@@ -3,8 +3,6 @@ import { PokemonList } from '../components/tPokemonList';
 // import { PokemonList } from '../components/PokemonList/PokemonList';
 
 export function HomeScreen() {
-  // const { pokemons, isLoading, getPokemons } = useGetPokemons();
-
   return (
     <View style={styles.container}>
       <PokemonList />

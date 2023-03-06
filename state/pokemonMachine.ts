@@ -14,8 +14,18 @@ const loadPokemons = async (context) => {
   return {
     maxCount: fetchedPokemons.count,
     pokemons: fetchedPokemons.results,
+    nextUrl: fetchedPokemons.next,
   };
 };
+
+// const loadMorePokemons = async (context) => {
+//   const response = await fetch(context.nextUrl);
+//   const fetchedPokemons = await response.json();
+//   return {
+//     newPokemons: fetchedPokemons.results,
+//     nextUrl: fetchedPokemons.next,
+//   };
+// };
 
 export const pokemonMachine = createMachine(
   {
@@ -25,7 +35,13 @@ export const pokemonMachine = createMachine(
     schema: {
       services: {} as {
         loadPokemons: {
-          data: { pokemons: Pokemon[]; maxCount: number };
+          data: { pokemons: Pokemon[]; maxCount: number; nextUrl: string };
+        };
+        loadMorePokemons: {
+          data: {
+            newPokemons: Pokemon[];
+            nextUrl: string;
+          };
         };
       },
       events: {} as { type: 'toggleFavorite'; favoriteToToggle: Pokemon } | { type: 'loadMore' },
@@ -36,6 +52,7 @@ export const pokemonMachine = createMachine(
       errorMessage: undefined as string | undefined,
       favoritePokemons: [] as Pokemon[],
       moreToLoad: false,
+      nextUrl: '',
     },
     tsTypes: {} as import('./pokemonMachine.typegen').Typegen0,
     states: {
@@ -64,13 +81,24 @@ export const pokemonMachine = createMachine(
           },
         },
       },
-
+      // 'Load more Pokemons': {
+      //   invoke: {
+      //     src: 'loadMorePokemons',
+      //     onDone: [
+      //       {
+      //         target: 'Pokemons loaded',
+      //         actions: 'assignMorePokemonsToContext',
+      //       },
+      //     ],
+      //   },
+      // },
       'Loading Pokemons failed': {},
     },
   },
   {
     services: {
       loadPokemons,
+      // loadMorePokemons,
     },
     actions: {
       togglePokemonInFavorite: assign({
@@ -83,11 +111,17 @@ export const pokemonMachine = createMachine(
             : [...context.favoritePokemons, event.favoriteToToggle];
         },
       }),
-
+      // assignMorePokemonsToContext: assign((context, event) => {
+      //   return {
+      //     pokemons: [...context.pokemons, ...event.data.newPokemons],
+      //     nextUrl: event.data.nextUrl,
+      //   };
+      // }),
       assignPokemonsToContext: assign((context, event) => {
         return {
           pokemons: event.data.pokemons,
           moreToLoad: context.pokemons.length < event.data.maxCount,
+          nextUrl: event.data.nextUrl,
         };
       }),
       assignErrorToContext: assign(() => {
