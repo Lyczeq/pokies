@@ -1,6 +1,7 @@
-import { useMachine } from '@xstate/react';
+import { useActor } from '@xstate/react';
+import { useCallback, useContext } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
-import { pokemonMachine } from '../state/pokemonMachine';
+import { PokemonsContext } from '../contexts/PokemonsContext';
 import { Pokemon } from '../types/Pokemon';
 import { PokemonListElement } from './PokemonListElement/PokemonListElement';
 
@@ -11,7 +12,13 @@ type PokemonListProps = {
 };
 
 export const PokemonList = function () {
-  const [state, send] = useMachine(pokemonMachine);
+  const pokemonsService = useContext(PokemonsContext);
+  const [state, send] = useActor(pokemonsService.pokemonService);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Pokemon }) => <PokemonListElement pokemon={item} key={item.name} />,
+    [],
+  );
 
   return (
     <>
@@ -22,13 +29,9 @@ export const PokemonList = function () {
           style={styles.container}
           data={state.context.pokemons}
           keyExtractor={({ name }) => name}
-          renderItem={({ item }) => <PokemonListElement pokemon={item} />}
-          onEndReachedThreshold={0.2}
-          onEndReached={() =>
-            send({
-              type: 'loadMore',
-            })
-          }
+          renderItem={renderItem}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => send('loadMore')}
           // ListFooterComponent={
           //   state.matches('Loading Pokemons') && (
           //     <View style={{ margin: 80 }}>
