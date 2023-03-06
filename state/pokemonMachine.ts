@@ -11,7 +11,6 @@ const loadPokemons = async (context) => {
     `https://pokeapi.co/api/v2/pokemon/?limit=${context.pokemons.length + 20}`,
   );
   const fetchedPokemons = await response.json();
-
   return {
     maxCount: fetchedPokemons.count,
     pokemons: fetchedPokemons.results,
@@ -57,7 +56,6 @@ export const pokemonMachine = createMachine(
           ],
         },
       },
-
       'Pokemons loaded': {
         on: {
           loadMore: 'Loading Pokemons',
@@ -92,7 +90,7 @@ export const pokemonMachine = createMachine(
           moreToLoad: context.pokemons.length < event.data.maxCount,
         };
       }),
-      assignErrorToContext: assign((context, event) => {
+      assignErrorToContext: assign(() => {
         return {
           errorMessage: 'Something went wrong, try to refresh to load pokemons again.',
         };

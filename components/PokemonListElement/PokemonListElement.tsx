@@ -18,17 +18,15 @@ export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
     });
   };
 
-  const handleIconFavorite = (pokemonName: string) => {
-    return state.context.favoritePokemons.find((fp) => fp.name === pokemonName)
-      ? 'heart'
-      : 'hearto';
-  };
+  const isPokemonFavorite = state.context.favoritePokemons.find((fp) => fp.name === pokemon.name)
+    ? 'heart'
+    : 'hearto';
 
   return (
     <View style={styles.listElement}>
       <Button title={pokemon.name} onPress={() => navigateToPokemonDetails(pokemon)} />
       <AntDesign
-        name={handleIconFavorite(pokemon.name)}
+        name={isPokemonFavorite}
         size={24}
         color="red"
         onPress={() => send({ type: 'toggleFavorite', favoriteToToggle: pokemon })}
