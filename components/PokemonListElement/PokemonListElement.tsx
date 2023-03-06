@@ -1,13 +1,15 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useMachine } from '@xstate/react';
 import React, { memo } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import { useFavoritePokemons } from '../../hooks/useFavoritePokemons';
+import { pokemonMachine } from '../../state/pokemonMachine';
 import { Pokemon } from '../../types/Pokemon';
 
 export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   const { navigate } = useNavigation();
-  const { togglePokemonFromFavorites, isPokemonFavorite } = useFavoritePokemons();
+  // const { togglePokemonFromFavorites, isPokemonFavorite } = useFavoritePokemons();
+  const [state, send] = useMachine(pokemonMachine);
 
   const navigateToPokemonDetails = (item: Pokemon) => {
     navigate('pokemon-details', {
@@ -17,7 +19,9 @@ export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   };
 
   const handleIconFavorite = (pokemonName: string) => {
-    return isPokemonFavorite(pokemonName) ? 'heart' : 'hearto';
+    return state.context.favoritePokemons.find((fp) => fp.name === pokemonName)
+      ? 'heart'
+      : 'hearto';
   };
 
   return (
@@ -27,7 +31,7 @@ export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
         name={handleIconFavorite(pokemon.name)}
         size={24}
         color="red"
-        onPress={() => togglePokemonFromFavorites(pokemon)}
+        onPress={() => send({ type: 'toggleFavorite', favoriteToToggle: pokemon })}
       />
     </View>
   );

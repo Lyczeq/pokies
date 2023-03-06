@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native';
-import { PokemonList } from '../components/PokemonList/PokemonList';
-import { useGetPokemons } from '../hooks/usePokemonList';
+import { PokemonList } from '../components/tPokemonList';
+// import { PokemonList } from '../components/PokemonList/PokemonList';
 
 export function HomeScreen() {
-  const { pokemons, isLoading, getPokemons } = useGetPokemons();
+  // const { pokemons, isLoading, getPokemons } = useGetPokemons();
 
   return (
     <View style={styles.container}>
-      <PokemonList pokemons={pokemons} isLoading={isLoading} getPokemons={getPokemons} />
+      <PokemonList />
     </View>
   );
 }

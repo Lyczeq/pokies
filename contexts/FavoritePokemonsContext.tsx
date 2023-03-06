@@ -1,6 +1,6 @@
 import { useInterpret } from '@xstate/react';
 import { createContext } from 'react';
-import { favoritePokemonsMachine } from '../state/favoritePokemonsMachine';
+import { favoritePokemonsMachine } from '../state/pokemonMachine';
 
 type FavoritePokemonsContextProvider = {
   favoritePokemonsService: {
