@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PokemonsContextProvider } from './contexts/PokemonsContext';
 import { FavoritePokemons } from './screens/FavoritePokemons';
 import { HomeScreen } from './screens/HomeScreen';
+import { Map } from './screens/Map';
 import { PokemonDetails } from './screens/PokemonDetails';
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +34,17 @@ const Home = () => {
           tabBarIcon: ({ focused }) => {
             const color = focused === true ? 'red' : 'grey';
             return <Ionicons name="heart" size={24} color={color} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={Map}
+        options={{
+          title: 'Map',
+          tabBarIcon: ({ focused }) => {
+            const color = focused === true ? 'blue' : 'grey';
+            return <Ionicons name="map" size={24} color={color} />;
           },
         }}
       />
