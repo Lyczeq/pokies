@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { FavoritePokemonsContextProvider } from './contexts/FavoritePokemonsContext';
+import { PokemonsContextProvider } from './contexts/PokemonsContext';
 import { FavoritePokemons } from './screens/FavoritePokemons';
 import { HomeScreen } from './screens/HomeScreen';
 import { PokemonDetails } from './screens/PokemonDetails';
@@ -42,8 +42,8 @@ const Home = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <FavoritePokemonsContextProvider>
+    <PokemonsContextProvider>
+      <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen
@@ -52,7 +52,7 @@ export default function App() {
             options={({ route }) => ({ title: route.params?.name })}
           />
         </Stack.Navigator>
-      </FavoritePokemonsContextProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </PokemonsContextProvider>
   );
 }
