@@ -1,14 +1,13 @@
 import { useActor } from '@xstate/react';
 import { useCallback, useContext } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { PokemonListElement } from '../components/PokemonListElement';
 import { PokemonsContext } from '../contexts/PokemonsContext';
 import { Pokemon } from '../types/Pokemon';
-// import { useFavoritePokemons } from '../hooks/useFavoritePokemons';
 
 export function FavoritePokemons() {
   const pokemonsService = useContext(PokemonsContext);
-  const [state, send] = useActor(pokemonsService.pokemonService);
+  const [state] = useActor(pokemonsService.pokemonService);
 
   const renderItem = useCallback(
     ({ item }: { item: Pokemon }) => <PokemonListElement pokemon={item} key={item.name} />,
@@ -17,11 +16,15 @@ export function FavoritePokemons() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={state.context.favoritePokemons}
-        keyExtractor={({ name }) => name}
-        renderItem={renderItem}
-      />
+      {state.context.favoritePokemons.length === 0 ? (
+        <Text style={styles.emptyListMessage}>Your favorite pokemon list is empty</Text>
+      ) : (
+        <FlatList
+          data={state.context.favoritePokemons}
+          keyExtractor={({ name }) => name}
+          renderItem={renderItem}
+        />
+      )}
     </View>
   );
 }
@@ -30,5 +33,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  emptyListMessage: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 20,
   },
 });
