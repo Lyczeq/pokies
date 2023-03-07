@@ -1,23 +1,22 @@
-// import { useActor } from '@xstate/react';
-// import { useContext } from 'react';
-// import { FavoritePokemonsContext } from '../contexts/PokemonsContext';
-// import { Pokemon } from '../types/Pokemon';
+import { useActor } from '@xstate/react';
+import { useContext } from 'react';
+import { PokemonsContext } from './../contexts/PokemonsContext';
+import { Pokemon } from './../types/Pokemon';
 
-// export const useFavoritePokemons = () => {
-//   const service = useContext(FavoritePokemonsContext);
-//   const [state, send] = useActor(service.favoritePokemonsService);
+export const useFavoritePokemons = () => {
+  const pokemonsService = useContext(PokemonsContext);
+  const [state, send] = useActor(pokemonsService.pokemonService);
 
-//   const togglePokemonFromFavorites = (pokemon: Pokemon) => {
-//     send({ type: 'FAVORITE.TOGGLE', newFavorite: pokemon });
-//   };
+  const togglePokemonFromFavorites = (pokemon: Pokemon) => {
+    send({ type: 'toggleFavorite', favoriteToToggle: pokemon });
+  };
 
-//   const isPokemonFavorite = (pokemonName: string) => {
-//     return !!state.context.favorites.find((f) => f.name === pokemonName);
-//   };
+  const isPokemonFavorite = (pokemonName: string) => {
+    return !!state.context.favoritePokemons.find((f) => f.name === pokemonName);
+  };
 
-//   return {
-//     favoritePokemons: state.context.favorites,
-//     togglePokemonFromFavorites,
-//     isPokemonFavorite,
-//   };
-// };
+  return {
+    togglePokemonFromFavorites,
+    isPokemonFavorite,
+  };
+};

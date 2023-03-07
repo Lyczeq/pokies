@@ -1,8 +1,11 @@
+import { AntDesign } from '@expo/vector-icons';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { useFavoritePokemons } from '../hooks/useFavoritePokemons';
 import { useGetSinglePokemon } from '../hooks/useGetSinglePokemon';
 
 export function PokemonDetails({ route }) {
   const { pokemon, isLoading } = useGetSinglePokemon(route.params.url);
+  const { isPokemonFavorite, togglePokemonFromFavorites } = useFavoritePokemons();
   const stats = (pokemon?.stats ?? []).map((p) => ({
     name: p.stat.name,
     number: p['base_stat'],
@@ -14,7 +17,15 @@ export function PokemonDetails({ route }) {
         <ActivityIndicator />
       ) : (
         <>
-          <Text style={styles.name}>{pokemon.name}</Text>
+          <View style={styles.header}>
+            <Text style={styles.name}>{pokemon.name}</Text>
+            <AntDesign
+              size={24}
+              name={isPokemonFavorite(pokemon.name) ? 'heart' : 'hearto'}
+              onPress={() => togglePokemonFromFavorites(pokemon)}
+              color="red"
+            />
+          </View>
           <Image style={styles.image} source={{ uri: pokemon.sprites['front_default'] }} />
           <View style={styles.stats}>
             {stats.map((s) => (
@@ -35,6 +46,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     display: 'flex',
     alignItems: 'center',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 20,
   },
   image: {
     width: 240,
