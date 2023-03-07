@@ -1,36 +1,41 @@
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { useActor } from '@xstate/react';
+import { useCallback, useContext } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
+import { PokemonsContext } from '../../contexts/PokemonsContext';
 import { Pokemon } from '../../types/Pokemon';
 import { PokemonListElement } from '../PokemonListElement/PokemonListElement';
 
-type PokemonListProps = {
-  pokemons: Pokemon[];
-  isLoading?: boolean;
-  getPokemons?: VoidFunction;
-};
+export const PokemonList = function () {
+  const pokemonsService = useContext(PokemonsContext);
+  const [state, send] = useActor(pokemonsService.pokemonService);
 
-export const PokemonList = function ({
-  pokemons,
-  isLoading,
-  getPokemons,
-}: PokemonListProps) {
-  return isLoading ? (
-    <ActivityIndicator />
-  ) : (
-    <FlatList
-      style={styles.container}
-      data={pokemons}
-      keyExtractor={({ name }) => name}
-      renderItem={({ item }) => <PokemonListElement pokemon={item} />}
-      onEndReachedThreshold={0.1}
-      onEndReached={getPokemons}
-      ListFooterComponent={
-        getPokemons && (
-          <View style={{ margin: 80 }}>
-            <ActivityIndicator />
-          </View>
-        )
-      }
-    />
+  const renderItem = useCallback(
+    ({ item }: { item: Pokemon }) => <PokemonListElement pokemon={item} key={item.name} />,
+    [],
+  );
+
+  return (
+    <>
+      {state.matches('Loading Pokemons') && <ActivityIndicator />}
+      {state.matches('Loading Pokemons failed') && <Text>{state.context.errorMessage}</Text>}
+      {state.matches('Pokemons loaded') && (
+        <FlatList
+          style={styles.container}
+          data={state.context.pokemons}
+          keyExtractor={({ name }) => name}
+          renderItem={renderItem}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => send('loadMore')}
+          // ListFooterComponent={
+          //   state.matches('Loading Pokemons') && (
+          //     <View style={{ margin: 80 }}>
+          //       <ActivityIndicator />
+          //     </View>
+          //   )
+          // }
+        />
+      )}
+    </>
   );
 };
 

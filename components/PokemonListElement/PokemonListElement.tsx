@@ -8,7 +8,6 @@ import { Pokemon } from '../../types/Pokemon';
 
 export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   const { navigate } = useNavigation();
-  // const { togglePokemonFromFavorites, isPokemonFavorite } = useFavoritePokemons();
   const pokemonsService = useContext(PokemonsContext);
   const [state, send] = useActor(pokemonsService.pokemonService);
 

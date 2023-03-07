@@ -10,6 +10,7 @@ const loadPokemons = async (context) => {
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon/?limit=${context.pokemons.length + 20}`,
   );
+  console.log(context.pokemons.length);
   const fetchedPokemons = await response.json();
   return {
     maxCount: fetchedPokemons.count,

@@ -1,6 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { PokemonList } from '../components/tPokemonList';
-// import { PokemonList } from '../components/PokemonList/PokemonList';
+import { PokemonList } from '../components/PokemonList/PokemonList';
 
 export function HomeScreen() {
   return (
