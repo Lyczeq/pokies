@@ -9,6 +9,7 @@ export function Map() {
   const { location, errorMessage } = useLocation();
   const { pokemon, isLoading } = useGetSinglePokemon(PIKACHU_URL);
   const imageUrl = pokemon?.sprites['front_default'];
+
   return (
     <View style={styles.container}>
       <MapView style={styles.mapView} initialRegion={location}>

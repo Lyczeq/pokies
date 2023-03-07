@@ -3,8 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useActor } from '@xstate/react';
 import React, { memo, useContext } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import { PokemonsContext } from '../../contexts/PokemonsContext';
-import { Pokemon } from '../../types/Pokemon';
+import { PokemonsContext } from '../contexts/PokemonsContext';
+import { Pokemon } from '../types/Pokemon';
 
 export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   const { navigate } = useNavigation();

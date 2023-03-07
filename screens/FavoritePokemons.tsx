@@ -1,7 +1,7 @@
 import { useActor } from '@xstate/react';
 import { useCallback, useContext } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { PokemonListElement } from '../components/PokemonListElement/PokemonListElement';
+import { PokemonListElement } from '../components/PokemonListElement';
 import { PokemonsContext } from '../contexts/PokemonsContext';
 import { Pokemon } from '../types/Pokemon';
 // import { useFavoritePokemons } from '../hooks/useFavoritePokemons';

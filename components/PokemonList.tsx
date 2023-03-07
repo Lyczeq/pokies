@@ -1,9 +1,9 @@
 import { useActor } from '@xstate/react';
 import { useCallback, useContext } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
-import { PokemonsContext } from '../../contexts/PokemonsContext';
-import { Pokemon } from '../../types/Pokemon';
-import { PokemonListElement } from '../PokemonListElement/PokemonListElement';
+import { PokemonsContext } from '../contexts/PokemonsContext';
+import { Pokemon } from '../types/Pokemon';
+import { PokemonListElement } from './PokemonListElement';
 
 export const PokemonList = function () {
   const pokemonsService = useContext(PokemonsContext);
