@@ -1,6 +1,6 @@
 import { useActor } from '@xstate/react';
 import { useCallback, useContext } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { PokemonsContext } from '../contexts/PokemonsContext';
 import { Pokemon } from '../types/Pokemon';
 import { PokemonListElement } from './PokemonListElement';
@@ -18,21 +18,21 @@ export const PokemonList = function () {
     <>
       {state.matches('Loading Pokemons') && <ActivityIndicator />}
       {state.matches('Loading Pokemons failed') && <Text>{state.context.errorMessage}</Text>}
-      {state.matches('Pokemons loaded') && (
+      {state.context.pokemons.length > 0 && (
         <FlatList
           style={styles.container}
           data={state.context.pokemons}
           keyExtractor={({ name }) => name}
           renderItem={renderItem}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.2}
           onEndReached={() => send('loadMore')}
-          // ListFooterComponent={
-          //   state.matches('Loading Pokemons') && (
-          //     <View style={{ margin: 80 }}>
-          //       <ActivityIndicator />
-          //     </View>
-          //   )
-          // }
+          ListFooterComponent={
+            state.matches('Load more Pokemons') && (
+              <View style={{ marginBottom: 80 }}>
+                <ActivityIndicator />
+              </View>
+            )
+          }
         />
       )}
     </>

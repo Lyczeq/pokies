@@ -11,10 +11,10 @@ export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
   const pokemonsService = useContext(PokemonsContext);
   const [state, send] = useActor(pokemonsService.pokemonService);
 
-  const navigateToPokemonDetails = (item: Pokemon) => {
+  const navigateToPokemonDetails = () => {
     navigate('pokemon-details', {
-      name: item.name,
-      url: item.url,
+      name: pokemon.name,
+      url: pokemon.url,
     });
   };
 
@@ -24,7 +24,7 @@ export const PokemonListElement = memo(({ pokemon }: { pokemon: Pokemon }) => {
 
   return (
     <View style={styles.listElement}>
-      <Button title={pokemon.name} onPress={() => navigateToPokemonDetails(pokemon)} />
+      <Button title={pokemon.name} onPress={navigateToPokemonDetails} />
       <AntDesign
         name={isPokemonFavorite}
         size={24}

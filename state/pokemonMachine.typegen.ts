@@ -3,6 +3,11 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   internalEvents: {
+    'done.invoke.pokemon-machine.Load more Pokemons:invocation[0]': {
+      type: 'done.invoke.pokemon-machine.Load more Pokemons:invocation[0]';
+      data: unknown;
+      __tip: 'See the XState TS docs to learn how to strongly type this.';
+    };
     'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]': {
       type: 'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]';
       data: unknown;
@@ -15,7 +20,9 @@ export interface Typegen0 {
     'xstate.init': { type: 'xstate.init' };
   };
   invokeSrcNameMap: {
-    loadPokemons: 'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]';
+    loadPokemons:
+      | 'done.invoke.pokemon-machine.Load more Pokemons:invocation[0]'
+      | 'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]';
   };
   missingImplementations: {
     actions: never;
@@ -25,7 +32,9 @@ export interface Typegen0 {
   };
   eventsCausingActions: {
     assignErrorToContext: 'error.platform.pokemon-machine.Loading Pokemons:invocation[0]';
-    assignPokemonsToContext: 'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]';
+    assignPokemonsToContext:
+      | 'done.invoke.pokemon-machine.Load more Pokemons:invocation[0]'
+      | 'done.invoke.pokemon-machine.Loading Pokemons:invocation[0]';
     togglePokemonInFavorite: 'toggleFavorite';
   };
   eventsCausingDelays: {};
@@ -33,6 +42,10 @@ export interface Typegen0 {
   eventsCausingServices: {
     loadPokemons: 'loadMore' | 'xstate.init';
   };
-  matchesStates: 'Loading Pokemons' | 'Loading Pokemons failed' | 'Pokemons loaded';
+  matchesStates:
+    | 'Load more Pokemons'
+    | 'Loading Pokemons'
+    | 'Loading Pokemons failed'
+    | 'Pokemons loaded';
   tags: never;
 }

@@ -1,32 +1,15 @@
 import { assign, createMachine } from 'xstate';
 import { Pokemon } from '../types/Pokemon';
 
-type EventToggleFavorite = {
-  type: 'FAVORITE.TOGGLE';
-  newFavorite: Pokemon;
-};
-
 const loadPokemons = async (context) => {
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?limit=${context.pokemons.length + 20}`,
-  );
-  console.log(context.pokemons.length);
+  const response = await fetch(context.url);
   const fetchedPokemons = await response.json();
   return {
     maxCount: fetchedPokemons.count,
     pokemons: fetchedPokemons.results,
-    nextUrl: fetchedPokemons.next,
+    url: fetchedPokemons.next,
   };
 };
-
-// const loadMorePokemons = async (context) => {
-//   const response = await fetch(context.nextUrl);
-//   const fetchedPokemons = await response.json();
-//   return {
-//     newPokemons: fetchedPokemons.results,
-//     nextUrl: fetchedPokemons.next,
-//   };
-// };
 
 export const pokemonMachine = createMachine(
   {
@@ -36,12 +19,12 @@ export const pokemonMachine = createMachine(
     schema: {
       services: {} as {
         loadPokemons: {
-          data: { pokemons: Pokemon[]; maxCount: number; nextUrl: string };
+          data: { pokemons: Pokemon[]; maxCount: number; url: string };
         };
         loadMorePokemons: {
           data: {
             newPokemons: Pokemon[];
-            nextUrl: string;
+            url: string;
           };
         };
       },
@@ -53,7 +36,7 @@ export const pokemonMachine = createMachine(
       errorMessage: undefined as string | undefined,
       favoritePokemons: [] as Pokemon[],
       moreToLoad: false,
-      nextUrl: '',
+      url: 'https://pokeapi.co/api/v2/pokemon/?limit=25&offset=0',
     },
     tsTypes: {} as import('./pokemonMachine.typegen').Typegen0,
     states: {
@@ -76,30 +59,29 @@ export const pokemonMachine = createMachine(
       },
       'Pokemons loaded': {
         on: {
-          loadMore: 'Loading Pokemons',
+          loadMore: 'Load more Pokemons',
           toggleFavorite: {
             actions: 'togglePokemonInFavorite',
           },
         },
       },
-      // 'Load more Pokemons': {
-      //   invoke: {
-      //     src: 'loadMorePokemons',
-      //     onDone: [
-      //       {
-      //         target: 'Pokemons loaded',
-      //         actions: 'assignMorePokemonsToContext',
-      //       },
-      //     ],
-      //   },
-      // },
+      'Load more Pokemons': {
+        invoke: {
+          src: 'loadPokemons',
+          onDone: [
+            {
+              target: 'Pokemons loaded',
+              actions: 'assignPokemonsToContext',
+            },
+          ],
+        },
+      },
       'Loading Pokemons failed': {},
     },
   },
   {
     services: {
       loadPokemons,
-      // loadMorePokemons,
     },
     actions: {
       togglePokemonInFavorite: assign({
@@ -112,17 +94,11 @@ export const pokemonMachine = createMachine(
             : [...context.favoritePokemons, event.favoriteToToggle];
         },
       }),
-      // assignMorePokemonsToContext: assign((context, event) => {
-      //   return {
-      //     pokemons: [...context.pokemons, ...event.data.newPokemons],
-      //     nextUrl: event.data.nextUrl,
-      //   };
-      // }),
       assignPokemonsToContext: assign((context, event) => {
         return {
-          pokemons: event.data.pokemons,
+          pokemons: [...context.pokemons, ...event.data.pokemons],
           moreToLoad: context.pokemons.length < event.data.maxCount,
-          nextUrl: event.data.nextUrl,
+          url: event.data.url,
         };
       }),
       assignErrorToContext: assign(() => {
@@ -133,28 +109,3 @@ export const pokemonMachine = createMachine(
     },
   },
 );
-
-export const favoritePokemonsMachine = createMachine({
-  id: 'favoritePokemons',
-  predictableActionArguments: true,
-  context: { favorites: [] as Pokemon[] },
-  schema: {
-    events: {} as EventToggleFavorite,
-  },
-  on: {
-    'FAVORITE.TOGGLE': {
-      actions: [
-        assign({
-          favorites: (context, event) => {
-            const isPokemonFavorite = context.favorites.find(
-              (f) => f.name === event.newFavorite.name,
-            );
-            return isPokemonFavorite
-              ? context.favorites.filter((f) => f.name !== event.newFavorite.name)
-              : [...context.favorites, event.newFavorite];
-          },
-        }),
-      ],
-    },
-  },
-});
